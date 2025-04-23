@@ -38,6 +38,10 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { createResume, getResumeById, updateResume } from "@/lib/api";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Experience } from "@/types/experience";
+import type { Education } from "@/types/education";
+import type { Certification } from "@/types/certification";
+import type { Attachment } from "@/types/attachment";
 
 const checkSupabaseConnection = async () => {
   try {
@@ -72,13 +76,11 @@ export default function CreateResumePage() {
   const [portfolioImagePreviews, setPortfolioImagePreviews] = useState<
     string[]
   >([]);
-  const [attachments, setAttachments] = useState<
-    Array<{
-      name: string;
-      url: string;
-    }>
-  >([]);
-  const [newAttachment, setNewAttachment] = useState({ name: "", url: "" });
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [newAttachment, setNewAttachment] = useState<Attachment>({
+    name: "",
+    url: "",
+  });
   const photoInputRef = useRef<HTMLInputElement>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
   const portfolioInputRef = useRef<HTMLInputElement>(null);
@@ -109,26 +111,13 @@ export default function CreateResumePage() {
     youtube: "",
   });
 
-  const [education, setEducation] = useState<Array<any>>([]);
+  const [education, setEducation] = useState<Education[]>([]);
 
-  const [certifications, setCertifications] = useState<
-    Array<{
-      name: string;
-      year: string;
-    }>
-  >([{ name: "", year: "" }]);
+  const [certifications, setCertifications] = useState<Certification[]>([
+    { name: "", year: "" },
+  ]);
 
-  const [experience, setExperience] = useState<
-    Array<{
-      company: string;
-      position: string;
-      location: string;
-      startDate: string;
-      endDate: string;
-      current: boolean;
-      description: string;
-    }>
-  >([
+  const [experience, setExperience] = useState<Experience[]>([
     {
       company: "",
       position: "",
@@ -320,7 +309,7 @@ export default function CreateResumePage() {
 
             // Set attachments if available
             if (Array.isArray(resumeData.attachments)) {
-              setAttachments(resumeData.attachments);
+              setAttachments(resumeData.attachments as Attachment[]);
             }
 
             // Set education if available
@@ -328,7 +317,7 @@ export default function CreateResumePage() {
               Array.isArray(resumeData.education) &&
               resumeData.education.length > 0
             ) {
-              setEducation(resumeData.education);
+              setEducation(resumeData.education as Education[]);
             }
 
             // Set experience if available
@@ -336,7 +325,7 @@ export default function CreateResumePage() {
               Array.isArray(resumeData.experience) &&
               resumeData.experience.length > 0
             ) {
-              setExperience(resumeData.experience);
+              setExperience(resumeData.experience as Experience[]);
             }
 
             // Set certifications if available
@@ -344,7 +333,7 @@ export default function CreateResumePage() {
               Array.isArray(resumeData.certifications) &&
               resumeData.certifications.length > 0
             ) {
-              setCertifications(resumeData.certifications);
+              setCertifications(resumeData.certifications as Certification[]);
             }
 
             console.log("Resume data loaded for editing:", resumeData.id);

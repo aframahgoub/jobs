@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { X, Loader2 } from "lucide-react";
 import { signUp } from "@/lib/auth-helpers";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RegisterFormProps {
   onClose: () => void;

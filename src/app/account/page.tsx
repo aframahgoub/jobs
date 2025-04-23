@@ -68,7 +68,8 @@ export default function AccountPage() {
     loadUserData();
   }, [router]);
 
-  const handleProfileUpdate = async () => {
+  const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
     setError("");
     setSuccess("");
