@@ -103,7 +103,7 @@ export default function AccountPage() {
     }
   };
 
-  const handlePasswordChange = async (e: any) => {
+  const handlePasswordChange = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
