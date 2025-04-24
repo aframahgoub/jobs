@@ -16,7 +16,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     // Initial load of resumes
-    fetchResumes({ query: "" });
+    fetchResumes({ query: "", filters: {} });
   }, []);
 
   const fetchResumes = async (query: string, filters: any) => {
