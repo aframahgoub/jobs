@@ -40,6 +40,7 @@ export interface Resume {
   views: number;
   contacts: number;
   slug: string;
+  portfolio_images?: string[];
 }
 
 export interface Education {
