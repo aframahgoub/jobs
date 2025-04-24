@@ -57,9 +57,7 @@ export default function SearchPage() {
         </h1>
 
         <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-          <SearchBar
-            onSearch={({ query, filters }) => fetchResumes(query, filters)}
-          />
+          <SearchBar onSearch={(searchParams) => fetchResumes(searchParams)} />
         </div>
 
         <div className="mb-4 flex justify-between items-center">
