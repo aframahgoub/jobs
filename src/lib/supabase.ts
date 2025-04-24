@@ -6,13 +6,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Check if environment variables are set
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn(
-    "Missing Supabase environment variables. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
-  );
+  console.error("Missing Supabase environment variables");
 }
 
 // Create a single supabase client for the entire app
-export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "", {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -118,8 +116,7 @@ export const initializeDatabaseTables = async () => {
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
           views INTEGER DEFAULT 0,
           contacts INTEGER DEFAULT 0,
-          slug TEXT,
-          portfolio_images TEXT[] DEFAULT '{}'
+          slug TEXT
         );
       `;
 
