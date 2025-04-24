@@ -15,7 +15,7 @@ export default function SearchPage() {
   const [activeFilters, setActiveFilters] = useState<any>({});
 
   useEffect(() => {
-    fetchResumes("");
+    fetchResumes({ query: "" });
   }, []);
 
   const fetchResumes = async (searchParams: {
