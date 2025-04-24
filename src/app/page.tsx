@@ -194,7 +194,7 @@ export default function HomePage() {
                 <ResumeCard
                   key={resume.id}
                   id={resume.id}
-                  name={resume.fullname}
+                  name={resume.name}
                   photoUrl={resume.photo}
                   bio={resume.bio}
                   skills={resume.skills}
