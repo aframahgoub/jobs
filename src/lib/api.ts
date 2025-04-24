@@ -48,7 +48,7 @@ export async function createResume(
     console.log("[API] User ID from resume data:", resumeData.user_id);
 
     // Validate required fields
-    const requiredFields = [
+    const requiredFields: (keyof typeof resumeData)[] = [
       "user_id",
       "firstname",
       "lastname",
