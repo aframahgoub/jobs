@@ -91,7 +91,18 @@ export default function SearchPage() {
         ) : resumes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {resumes.map((resume) => (
-              <ResumeCard key={resume.id} resume={resume} />
+              <ResumeCard
+                key={resume.id}
+                id={resume.id}
+                name={resume.name || ""}
+                photoUrl={resume.photo_url}
+                bio={resume.bio || ""}
+                skills={resume.skills || []}
+                title={resume.title}
+                hasCv={!!resume.cv_url}
+                yearsOfExperience={resume.years_of_experience}
+                location={resume.location}
+              />
             ))}
           </div>
         ) : (
