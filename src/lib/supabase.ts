@@ -1,15 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Get environment variables with fallbacks
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  "https://kbjzphkjtqvkgnsszyrj.supabase.co";
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtianpwaGtqdHF2a2duc3N6eXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUxNzcxMTIsImV4cCI6MjA2MDc1MzExMn0.xAjVqwAXnKxT1SNATaPDvHLUetKa_0svWCk9Wpzew_8";
+// Get environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Check if environment variables are set
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn(
+    "Missing Supabase environment variables. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
+  );
+}
 
 // Create a single supabase client for the entire app
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl || "", supabaseAnonKey || "", {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -115,7 +118,8 @@ export const initializeDatabaseTables = async () => {
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
           views INTEGER DEFAULT 0,
           contacts INTEGER DEFAULT 0,
-          slug TEXT
+          slug TEXT,
+          portfolio_images TEXT[] DEFAULT '{}'
         );
       `;
 

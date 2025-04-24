@@ -11,17 +11,22 @@ export async function executeSQL(sql: string) {
       sql.substring(0, 100) + (sql.length > 100 ? "..." : ""),
     );
 
-    // Get Supabase credentials
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    // Try using the RPC method first
+    try {
+      const { data, error } = await supabase.rpc("exec_sql", { sql });
 
-    if (!supabaseUrl || !supabaseKey) {
-      console.error("Missing Supabase URL or key");
-      return { success: false, error: "Missing Supabase configuration" };
+      if (!error) {
+        console.log("SQL execution successful via RPC");
+        return { success: true, data };
+      }
+
+      console.log("RPC method failed, trying direct query approach", error);
+    } catch (rpcError) {
+      console.log(
+        "RPC method not available, trying direct query approach",
+        rpcError,
+      );
     }
-
-    // Skip RPC method since it's not available in the current Supabase setup
-    console.log("Skipping RPC method and using direct query approach");
 
     // Try direct query as a fallback
     try {
@@ -31,8 +36,13 @@ export async function executeSQL(sql: string) {
         sql.trim().toUpperCase().startsWith("CREATE EXTENSION")
       ) {
         try {
-          // Try executing the SQL
-          await supabase.rpc("exec_sql", { sql });
+          // Try executing the SQL directly
+          const { data, error } = await supabase.rpc("exec_sql", { sql });
+
+          if (!error) {
+            console.log("Direct SQL execution successful");
+            return { success: true, data };
+          }
 
           // For CREATE TABLE specifically, check if we can query the table
           if (
@@ -63,53 +73,12 @@ export async function executeSQL(sql: string) {
         }
       }
     } catch (directError) {
-      console.log("Direct query failed, falling back to REST API", directError);
+      console.log("Direct query failed", directError);
     }
 
-    // Last resort: try the REST API
-    console.log("Attempting SQL execution via REST API");
-    console.log(`Using Supabase URL: ${supabaseUrl.substring(0, 20)}...`);
-
-    const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${supabaseKey}`,
-        apikey: supabaseKey,
-        Prefer: "params=single-object",
-      },
-      body: JSON.stringify({ sql }),
-    });
-
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch (e) {
-        errorData = { message: "Could not parse error response" };
-      }
-
-      // Special case: if we're creating a table and get a duplicate table error,
-      // consider this a success since the table already exists
-      if (
-        sql.trim().toUpperCase().includes("CREATE TABLE") &&
-        (response.status === 409 ||
-          (errorData &&
-            typeof errorData === "object" &&
-            (errorData.message?.includes("already exists") ||
-              errorData.error?.includes("already exists"))))
-      ) {
-        console.log("Table already exists, considering this a success");
-        return { success: true };
-      }
-
-      console.error("Error executing SQL via REST API:", errorData);
-      return { success: false, error: errorData };
-    }
-
-    const result = await response.json();
-    console.log("SQL execution successful");
-    return { success: true, data: result };
+    // If we get here, both methods failed
+    console.log("All SQL execution methods failed");
+    return { success: false, error: "Failed to execute SQL" };
   } catch (err) {
     console.error("Error executing SQL:", err);
     return { success: false, error: err };
