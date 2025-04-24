@@ -53,9 +53,14 @@ export function SetupDatabaseButton() {
           GRANT EXECUTE ON FUNCTION public.exec_sql(text) TO authenticated, anon;
         `;
 
-        await supabase.rpc("exec_sql", { sql: createFunctionSQL }).catch(() => {
-          console.log("Error creating exec_sql function or it already exists");
-        });
+        try {
+          await supabase.rpc("exec_sql", { sql: createFunctionSQL });
+        } catch (error) {
+          console.log(
+            "Error creating exec_sql function or it already exists",
+            error,
+          );
+        }
       } catch (funcError) {
         console.warn(
           "Error creating exec_sql function, continuing:",
