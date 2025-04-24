@@ -16,7 +16,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     // Initial load of resumes
-    fetchResumes("", {});
+    fetchResumes({ query: "" });
   }, []);
 
   const fetchResumes = async (query: string, filters: any) => {
@@ -58,9 +58,7 @@ export default function SearchPage() {
         </h1>
 
         <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-          <SearchBar
-            onSearch={({ query, filters }) => fetchResumes(query, filters)}
-          />
+          <SearchBar onSearch={fetchResumes} />
         </div>
 
         <div className="mb-4 flex justify-between items-center">
