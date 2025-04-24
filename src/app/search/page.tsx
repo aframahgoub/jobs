@@ -94,7 +94,7 @@ export default function SearchPage() {
               <ResumeCard
                 key={resume.id}
                 id={resume.id}
-                name={resume.name || ""}
+                name={resume.fullname || ""}
                 photoUrl={resume.photo_url}
                 bio={resume.bio || ""}
                 skills={resume.skills || []}
