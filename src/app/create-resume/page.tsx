@@ -42,6 +42,7 @@ import type { Experience } from "@/types/experience";
 import type { Education } from "@/types/education";
 import type { Certification } from "@/types/certification";
 import type { Attachment } from "@/types/attachment";
+import type { ResumeData } from "@/types/resume-data";
 
 const checkSupabaseConnection = async () => {
   try {
@@ -548,7 +549,7 @@ export default function CreateResumePage() {
         }
       }
 
-      const resumeData = {
+      const resumeData: ResumeData = {
         user_id: user.id,
         firstname: formData.firstname,
         lastname: formData.lastname,
@@ -583,9 +584,9 @@ export default function CreateResumePage() {
         "bio",
         "email",
       ];
-      const missingFields = requiredFields.filter(
-        (field) => !resumeData[field],
-      );
+      const missingFields = requiredFields.filter((field) => {
+        return !resumeData[field as keyof ResumeData];
+      });
 
       if (missingFields.length > 0) {
         console.error(`Missing required fields: ${missingFields.join(", ")}`);
