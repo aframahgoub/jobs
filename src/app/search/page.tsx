@@ -95,12 +95,12 @@ export default function SearchPage() {
                 key={resume.id}
                 id={resume.id}
                 name={resume.fullname || ""}
-                photoUrl={resume.photo_url}
+                photoUrl={resume.photo}
                 bio={resume.bio || ""}
                 skills={resume.skills || []}
                 title={resume.title}
                 hasCv={!!resume.cv_url}
-                yearsOfExperience={resume.years_of_experience}
+                yearsOfExperience={resume.yearsofexperience}
                 location={resume.location}
               />
             ))}
