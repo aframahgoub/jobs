@@ -67,7 +67,7 @@ export default function CreateAccountForm({ onClose }: CreateAccountFormProps) {
       localStorage.setItem(
         "authUser",
         JSON.stringify({
-          id: data.user.id,
+          id: data.user?.id,
           email: data.user.email,
           name: name,
           lastLogin: new Date().toISOString(),
