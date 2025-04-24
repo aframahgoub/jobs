@@ -18,14 +18,27 @@ export default function SearchPage() {
     fetchResumes("", {});
   }, []);
 
-  const fetchResumes = async (query: string, filters: any) => {
+  const fetchResumes = async (searchParams: {
+    query: string;
+    location?: string;
+    experience?: string;
+    skills?: string[];
+  }) => {
     setIsLoading(true);
     setError(null);
-    setSearchQuery(query);
+    setSearchQuery(searchParams.query);
+
+    // Extract filters from searchParams
+    const filters = {
+      location: searchParams.location,
+      experience: searchParams.experience,
+      skills: searchParams.skills,
+    };
+
     setActiveFilters(filters);
 
     try {
-      const { data, error } = await searchResumes(query, filters);
+      const { data, error } = await searchResumes(searchParams.query, filters);
 
       if (error) throw error;
 
