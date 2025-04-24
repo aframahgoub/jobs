@@ -50,7 +50,7 @@ export default function CreateAccountForm({ onClose }: CreateAccountFormProps) {
       if (data.user) {
         const { error: userError } = await supabase.from("users").insert([
           {
-            id: data.user.id,
+            id: data.user?.id,
             full_name: name,
             email: email,
             created_at: new Date().toISOString(),
@@ -68,7 +68,7 @@ export default function CreateAccountForm({ onClose }: CreateAccountFormProps) {
         "authUser",
         JSON.stringify({
           id: data.user?.id,
-          email: data.user.email,
+          email: data.user?.email,
           name: name,
           lastLogin: new Date().toISOString(),
         }),
