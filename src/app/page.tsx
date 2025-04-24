@@ -29,7 +29,7 @@ export default function HomePage() {
         }
 
         setResumes(data.resumes || []);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching resumes:", err);
         setError(err.message);
       } finally {
