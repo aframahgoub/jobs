@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
+import { Resume } from "@/types/database";
 import SearchBar from "@/components/search/SearchBar";
 import ResumeCard from "@/components/resume/ResumeCard";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export default function HomePage() {
   const router = useRouter();
   const { t } = useLanguage();
-  const [resumes, setResumes] = useState([]);
+  const [resumes, setResumes] = useState<Resume[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
