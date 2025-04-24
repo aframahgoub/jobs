@@ -35,7 +35,7 @@ export default function CVSpecialistsPage() {
         console.log("Supabase response:", data);
         setResumes(data || []);
         setFilteredResumes(data || []);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching resumes:", err);
         setError(err.message);
       } finally {
