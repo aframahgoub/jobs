@@ -77,14 +77,13 @@ export const initializeDatabaseTables = async () => {
     // Create the resumes table directly using the Supabase client
     try {
       // Create the uuid-ossp extension
-      await supabase
-        .rpc("exec_sql", {
+      try {
+        await supabase.rpc("exec_sql", {
           sql: 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";',
-        })
-        .catch((err) => {
-          console.log("Error creating extension, continuing anyway:", err);
         });
-
+      } catch (err) {
+        console.log("Error creating extension, continuing anyway:", err);
+      }
       // Create the resumes table
       const createTableSQL = `
         CREATE TABLE IF NOT EXISTS public.resumes (
@@ -120,9 +119,11 @@ export const initializeDatabaseTables = async () => {
         );
       `;
 
-      await supabase.rpc("exec_sql", { sql: createTableSQL }).catch((err) => {
+      try {
+        await supabase.rpc("exec_sql", { sql: createTableSQL });
+      } catch (err) {
         console.log("Error creating table, continuing anyway:", err);
-      });
+      }
 
       // Create indexes
       const createIndexesSQL = `
@@ -130,10 +131,11 @@ export const initializeDatabaseTables = async () => {
         CREATE INDEX IF NOT EXISTS resumes_created_at_idx ON public.resumes(created_at DESC);
         CREATE INDEX IF NOT EXISTS resumes_slug_idx ON public.resumes(slug);
       `;
-
-      await supabase.rpc("exec_sql", { sql: createIndexesSQL }).catch((err) => {
+      try {
+        await supabase.rpc("exec_sql", { sql: createIndexesSQL });
+      } catch (err) {
         console.log("Error creating indexes, continuing anyway:", err);
-      });
+      }
 
       console.log("Database tables initialized directly");
       return { success: true };
